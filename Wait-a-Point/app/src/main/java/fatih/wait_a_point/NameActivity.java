@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class NameActivity extends Activity {
 
     private Button btnJoin;
     private EditText txtName;
@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_name);
 
         btnJoin = (Button) findViewById(R.id.btnJoin);
         txtName = (EditText) findViewById(R.id.name);
@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 
                     String name = txtName.getText().toString().trim();
 
-                    Intent intent = new Intent(MainActivity.this,NameActivity.class);
+                    Intent intent = new Intent(NameActivity.this,MainActivity.class);
                     intent.putExtra("name", name);
 
                     startActivity(intent);
@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_name, menu);
         return true;
     }
 
