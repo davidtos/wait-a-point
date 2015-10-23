@@ -29,18 +29,22 @@ public class SocketMessenger extends Observable implements Runnable {
         t.start();
     }
     public void send(String message){
-        socket.emit("chat message",message);
+        socket.emit("chat message", message);
+    }
+
+    public void addUser(String message){
+        socket.emit("add-user",message);
     }
 
     @Override
     public void run() {
         try {
-            socket = IO.socket("http://145.144.240.188:3000");
+            socket = IO.socket("http://145.144.240.142:3000");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 
                 @Override
                 public void call(Object... args) {
-                        socket.emit("chat message", "hi");
+                    socket.emit("chat message", "hi");
                 }
 
             }).on("chat message", new Emitter.Listener() {

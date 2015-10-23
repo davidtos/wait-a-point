@@ -45,7 +45,8 @@ public class MainActivity extends Activity implements Observer {
     }
 
     public void Sendhoi(View v){
-      sm.send("hallo ik ben een android telefoon derp derp");
+        sm.addUser("David");
+   //   sm.send("hallo ik ben een android telefoon derp derp");
     }
 
     @Override
