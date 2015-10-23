@@ -24,8 +24,12 @@ public class SocketMessenger extends Observable implements Runnable {
         t = new Thread(this);
     }
 
-    public void start(){
+    private String username;
+
+    public void start(String username){
+        this.username = username;
         t.start();
+
     }
     public void send(String message){
         socket.emit("chat message", message);
@@ -43,11 +47,13 @@ public class SocketMessenger extends Observable implements Runnable {
     public void run() {
         try {
             socket = IO.socket("http://145.144.241.38:3000");
+            //socket = IO.socket("http://145.93.113.34:3000");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 
                 @Override
                 public void call(Object... args) {
-                    socket.emit("chat message", "hi");
+                    addUser(username);
+                    socket.emit("chat message", "New User Connected");
                 }
 
             }).on("chat message", new Emitter.Listener() {

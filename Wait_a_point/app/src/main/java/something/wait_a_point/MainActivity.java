@@ -23,9 +23,10 @@ public class MainActivity extends Activity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       String name = getIntent().getStringExtra("Name");
 
         sm.addObserver(this);
-        sm.start();
+        sm.start(name);
     }
 
     @Override
