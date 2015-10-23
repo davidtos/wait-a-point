@@ -25,6 +25,7 @@ io.on('connection', function(socket){
         clients[msg] = {
             "socket": socket.id
         };
+        console.log(msg);
         socket.emit('chat message', Object.keys(clients));       
     });
 });

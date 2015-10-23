@@ -14,6 +14,9 @@ public class FirstChallange extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_challange);
         setBackgroundBlack();
+        ChangeBackgroundColorThread changeBackgroundColorThread = new ChangeBackgroundColorThread(this,5000,6000);
+        Thread t = new Thread(changeBackgroundColorThread);
+        t.start();
     }
 
     public void setBackgroundBlack(){
@@ -32,8 +35,7 @@ public class FirstChallange extends Activity {
     }
 
     public void ClickedWhite(View v) {
-        ChangeBackgroundColorThread changeBackgroundColorThread = new ChangeBackgroundColorThread(this,1000,2000);
-        changeBackgroundColorThread.run();
+
         if (isWhite){
 
         }
