@@ -1,6 +1,7 @@
 package something.wait_a_point;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +21,6 @@ public class MainActivity extends Activity implements Observer {
 
         sm.addObserver(this);
         sm.start();
-
     }
 
     @Override
@@ -46,12 +46,15 @@ public class MainActivity extends Activity implements Observer {
     }
 
     public void Sendhoi(View v){
-        SendTo sendTo = new SendTo("SendTo","David","Fatih","Challange");
-
-        Gson gson = new Gson();
-        String sendToInString = gson.toJson(sendTo);
-        sm.addUser("David");
-        sm.SendTo(sendToInString);
+        sm.deleteObserver(this);
+        Intent intent = new Intent(this, FirstChallange.class);
+        startActivity(intent);
+//        SendTo sendTo = new SendTo("SendTo","David","Fatih","Challange");
+//
+//        Gson gson = new Gson();
+//        String sendToInString = gson.toJson(sendTo);
+//        sm.addUser("David");
+//        sm.SendTo(sendToInString);
    //   sm.send("hallo ik ben een android telefoon derp derp");
     }
 
