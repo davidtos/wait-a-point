@@ -26,12 +26,7 @@ public class ChangeBackgroundColorThread implements Runnable {
             e.printStackTrace();
         };
 
-        firstChallange.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                firstChallange.setBackgroundWhite();
-            }
-        });
+         firstChallange.setBackgroundWhite();
 
     }
 }
