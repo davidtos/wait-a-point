@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.gson.Gson;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,7 +17,6 @@ public class MainActivity extends Activity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         sm.addObserver(this);
         sm.start();
@@ -45,7 +46,12 @@ public class MainActivity extends Activity implements Observer {
     }
 
     public void Sendhoi(View v){
+        SendTo sendTo = new SendTo("SendTo","David","Fatih","Challange");
+
+        Gson gson = new Gson();
+        String sendToInString = gson.toJson(sendTo);
         sm.addUser("David");
+        sm.SendTo(sendToInString);
    //   sm.send("hallo ik ben een android telefoon derp derp");
     }
 

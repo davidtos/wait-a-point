@@ -22,7 +22,6 @@ public class SocketMessenger extends Observable implements Runnable {
 
     public SocketMessenger() {
         t = new Thread(this);
-
     }
 
     public void start(){
@@ -36,10 +35,14 @@ public class SocketMessenger extends Observable implements Runnable {
         socket.emit("add-user",message);
     }
 
+    public void SendTo(String message){
+        socket.emit("send to",message);
+    }
+
     @Override
     public void run() {
         try {
-            socket = IO.socket("http://145.144.240.142:3000");
+            socket = IO.socket("http://145.144.241.38:3000");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 
                 @Override

@@ -11,18 +11,21 @@ io.on('connection', function(socket){
     console.log('a user connected');
 
   socket.on('chat message', function(msg){
-    console.log('got a msg' + msg);
+    console.log('got a msg: ' + msg);
     io.emit('chat message', msg);
+    });
+    
+    socket.on('send to', function (msg) {
+        var json = JSON.parse(msg);
+        console.log('Send a msg to ' + json.to +  " payload was "  + json);
+        io.to(clients[json.to].socket).emit('chat message', msg);
     });
 
     socket.on('add-user', function (msg) {
         clients[msg] = {
             "socket": socket.id
         };
-        socket.emit('chat message', Object.keys(clients));
-        socket.send('chat message', clients);
-        console.log(clients["David"]);
-        io.to(clients['David'].socket).emit('chat message', 'hallo daar jij David');
+        socket.emit('chat message', Object.keys(clients));       
     });
 });
 
