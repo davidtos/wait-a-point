@@ -5,4 +5,5 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_name">NameActivity</string>
     <string name="title_activity_first_challange">Hit when white</string>
+    <string name="title_activity_challenge_window">ChallengeWindow</string>
 </resources>

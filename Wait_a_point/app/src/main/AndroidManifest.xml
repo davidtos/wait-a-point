@@ -26,6 +26,11 @@
             android:name=".FirstChallange"
             android:label="@string/title_activity_first_challange" >
         </activity>
+        <activity
+            android:name=".ChallengeWindow"
+            android:label="@string/title_activity_challenge_window"
+            android:theme="@style/AppTheme.CustomTheme">
+        </activity>
     </application>
 
 </manifest>

@@ -1,8 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:id="@+id/relativeLayout"
     android:layout_height="match_parent"
     android:background="@color/actionbar"
     tools:context=".MainActivity">
+
 
 
     <Button
@@ -15,23 +17,13 @@
         android:onClick="Sendhoi"/>
 
     <Button
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@drawable/roundprofilepic"
-        android:text="persoon 2"
-        android:id="@+id/btnmenu"
-        android:onClick="showPopUp"
-        android:layout_centerHorizontal="true"
-       />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="uitdaging window"
+        android:id="@+id/uitdaging"
+        android:onClick="TestWindowChallenge"/>
 
-    <Button
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:text="persoon 1"
-        android:background="@drawable/profileround"
-        android:id="@+id/btnmenu2"
-        android:onClick="showPopUp"
-        />
+
 
     <ImageView
         android:layout_width="wrap_content"
