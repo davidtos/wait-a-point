@@ -26,7 +26,7 @@ import java.util.Observer;
 import java.util.Random;
 
 public class MainActivity extends Activity implements Observer {
-    SocketMessenger sm = new SocketMessenger();
+  //  SocketMessenger sm = new SocketMessenger();
     RelativeLayout ll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +34,15 @@ public class MainActivity extends Activity implements Observer {
         setContentView(R.layout.activity_main);
        String name = getIntent().getStringExtra("Name");
 
-        sm.addObserver(this);
-        sm.start(name);
+        SingleSocket.getInstance().AddObserver(this);
+        SingleSocket.getInstance().Start(name);
+       // sm.addObserver(this);
+      //  sm.start(name);
         ll = (RelativeLayout)findViewById(R.id.relativeLayout);
-
-        CreatePlayers("Fatih");
-        CreatePlayers("David");
+       //SingleSocket.getInstance().getsm().send("hallo ik ben een phone");
+      //  SingleSocket.getInstance().getsm().send("David");
+        //CreatePlayers("Fatih");
+       // CreatePlayers("David");
     }
 
     @Override
@@ -65,16 +68,21 @@ public class MainActivity extends Activity implements Observer {
     }
 
     public void Sendhoi(View v){
-        sm.deleteObserver(this);
+        SingleSocket.getInstance().RemoveObserver(this);
         Intent intent = new Intent(this, FirstChallange.class);
+        intent.putExtra("player1", true);
+        intent.putExtra("player1name", "David");
+        intent.putExtra("player2name", "David");
+
         startActivity(intent);
-//        SendTo sendTo = new SendTo("SendTo","David","Fatih","Challange");
-//
-//        Gson gson = new Gson();
-//        String sendToInString = gson.toJson(sendTo);
-//        sm.addUser("David");
-//        sm.SendTo(sendToInString);
-   //   sm.send("hallo ik ben een android telefoon derp derp");
+
+        SendTo sendTo = new SendTo("SendTo","David","Fatih","Challange");
+
+        Gson gson = new Gson();
+        String sendToInString = gson.toJson(sendTo);
+        //sm.addUser("David");
+        //sm.SendTo(sendToInString);
+        //sm.send("hallo ik ben een android telefoon derp derp");
     }
 
     public void showPopUp(View view, String name){
@@ -110,10 +118,10 @@ public class MainActivity extends Activity implements Observer {
 
     public void CreatePlayers(final String name)
     {
-        runOnUiThread(new Runnable(){
+        runOnUiThread(new Runnable() {
             public void run() {
                 Button myButton = new Button(getApplicationContext());
-                myButton.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.profileround,getTheme()));
+                myButton.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.profileround, getTheme()));
                 myButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -126,7 +134,7 @@ public class MainActivity extends Activity implements Observer {
                 float y = r2.nextInt(1600 - 0);
                 myButton.setX(x);
                 myButton.setY(y);
-                ll.addView(myButton,200,200);
+                ll.addView(myButton, 200, 200);
             }
         });
     }
