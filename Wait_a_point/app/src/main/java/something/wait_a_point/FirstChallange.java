@@ -1,5 +1,6 @@
 package something.wait_a_point;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
@@ -117,7 +118,20 @@ public class FirstChallange extends Activity implements Observer {
         else{
             player2Score++;
         }
+
+        if(Rounds == 5){
+            SingleSocket.getInstance().RemoveObserver(this);
+            Intent intent = new Intent(this, FirstChallange.class);
+            intent.putExtra("player1", true);
+            intent.putExtra("player1name", "David");
+            intent.putExtra("player2name", "David");
+
+            startActivity(intent);
+        }
+        Rounds++;
         startRound();
+
+
     }
 
     public void playerPunish(){

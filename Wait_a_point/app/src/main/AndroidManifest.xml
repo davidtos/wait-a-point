@@ -3,7 +3,8 @@
     package="something.wait_a_point" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -29,7 +30,11 @@
         <activity
             android:name=".ChallengeWindow"
             android:label="@string/title_activity_challenge_window"
-            android:theme="@style/AppTheme.CustomTheme">
+            android:theme="@style/AppTheme.CustomTheme" >
+        </activity>
+        <activity
+            android:name=".Find"
+            android:label="@string/title_activity_find" >
         </activity>
     </application>
 
