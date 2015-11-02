@@ -29,6 +29,7 @@ public class ChangeBackgroundColorThread implements Runnable {
         firstChallange.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                firstChallange.SendToOtherPlayer("White");
                 firstChallange.setBackgroundWhite();
             }
         });

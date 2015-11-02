@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -18,10 +19,12 @@ public class FirstChallange extends Activity implements Observer {
         Black, White, RoundWon, Punish
     }
 
+    FirstChallange firstChallange;
     Boolean isWhite;
     int Rounds;
     String player1name;
     String player2name;
+    TextView t;
 
     int player1Score = 0;
     int player2Score = 0;
@@ -32,14 +35,22 @@ public class FirstChallange extends Activity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_challange);
-        SingleSocket.getInstance().AddObserver(this);
-
+        firstChallange = this;
+        SingleSocket.getInstance().AddObserver(firstChallange);
+        t = (TextView) findViewById(R.id.textViewScore);
         player1name = getIntent().getExtras().getString("player1name");
         player2name = getIntent().getExtras().getString("player2name");
         player1 = getIntent().getExtras().getBoolean("player1");
 
+        if(player1){
+            SendToOtherPlayer(messageStrings.Black.toString());
+        }
         setBackgroundBlack();
         startRound();
+    }
+
+    public void UpdateScore(){
+        t.setText(Integer.toString(player1Score) + " - " + Integer.toString(player2Score));
     }
 
     public void startRound(){
@@ -50,7 +61,7 @@ public class FirstChallange extends Activity implements Observer {
         }
     }
 
-    private void SendToOtherPlayer(String Message){
+    public void SendToOtherPlayer(String Message){
         if(player1){
             SendTo sendTo = new SendTo("SendTo",player2name,player1name,Message);
 
@@ -69,17 +80,11 @@ public class FirstChallange extends Activity implements Observer {
 
 
     public void setBackgroundBlack(){
-        if(player1){
-            SendToOtherPlayer(messageStrings.Black.toString());
-        }
         setActivityBackgroundColor(getResources().getColor(android.R.color.black));
         isWhite = false;
     }
 
     public void setBackgroundWhite(){
-        if(player1) {
-            SendToOtherPlayer(messageStrings.White.toString());
-        }
         setActivityBackgroundColor(getResources().getColor(android.R.color.white));
         isWhite = true;
     }
@@ -108,10 +113,21 @@ public class FirstChallange extends Activity implements Observer {
             }
             SendToOtherPlayer(messageStrings.Punish.toString());
         }
+        UpdateScore();
     }
 
     public void playerWonRound(){
-        setBackgroundBlack();
+        firstChallange.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setBackgroundBlack();
+            }
+        });
+
+
+        if (player1) {
+            SendToOtherPlayer(messageStrings.Black.toString());
+        }
         if (!player1){
             player1Score++;
         }
@@ -129,19 +145,28 @@ public class FirstChallange extends Activity implements Observer {
             startActivity(intent);
         }
         Rounds++;
+        UpdateScore();
         startRound();
 
 
     }
 
     public void playerPunish(){
-        setBackgroundBlack();
+        //setBackgroundBlack();
         if (!player1){
             player1Score--;
         }
         else{
             player2Score--;
         }
+
+        firstChallange.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                UpdateScore();
+            }
+        });
+
     }
 
 

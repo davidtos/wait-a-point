@@ -17,7 +17,7 @@ io.on('connection', function(socket){
     
     socket.on('send to', function (msg) {
         var json = JSON.parse(msg);
-        console.log('Send a msg to ' + json.to +  " payload was "  + json);
+        console.log('Send a msg to ' + json.to +  " payload was "  + json.Message);
         io.to(clients[json.to].socket).emit('chat message', msg);
     });
 
