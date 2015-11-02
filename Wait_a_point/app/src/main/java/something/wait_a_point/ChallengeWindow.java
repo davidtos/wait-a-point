@@ -10,6 +10,7 @@ import android.view.View;
 
 public class ChallengeWindow extends Activity {
 
+    String challeger;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,12 +23,14 @@ public class ChallengeWindow extends Activity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width*.7),(int)(height*.4));
+        this.challeger = getIntent().getStringExtra("Challeger");
+
     }
 
     public void Accept(View v)
     {
         Intent intent = new Intent();
-        intent.putExtra("answer","accept");
+        intent.putExtra("Challeger",this.challeger);
         setResult(RESULT_OK, intent);
         finish();
     }

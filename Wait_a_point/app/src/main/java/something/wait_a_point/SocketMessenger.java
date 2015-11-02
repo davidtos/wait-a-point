@@ -5,6 +5,8 @@
  */
 package something.wait_a_point;
 
+import com.google.gson.Gson;
+
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -46,14 +48,21 @@ public class SocketMessenger extends Observable implements Runnable {
     @Override
     public void run() {
         try {
-            socket = IO.socket("http://145.144.240.98:3000");
-            //socket = IO.socket("http://145.93.113.34:3000");
+            socket = IO.socket("http://192.168.2.13:3000");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 
                 @Override
                 public void call(Object... args) {
                     addUser(username);
-                    socket.emit("chat message", "New User Connected");
+
+                    //socket.emit("chat message", "New User Connected");
+
+                    // let everyone know new user joined
+                    SendAll sendToAll = new SendAll("NewUser",username,"New user joined : "+ username);
+
+                    Gson gson = new Gson();
+                    String sendToInString = gson.toJson(sendToAll);
+                    send(sendToInString);
                 }
 
             }).on("chat message", new Emitter.Listener() {
