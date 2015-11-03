@@ -24,7 +24,7 @@ public class PopUpMenuEventHandle implements PopupMenu.OnMenuItemClickListener {
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId()== 1) {
-            SendTo sendTo = new SendTo("Challenge",this.name,this.from,"Challenge for a game");
+            SendTo sendTo = new SendTo("Challenge",this.name,this.from,"Challenge for a game!");
 
             Gson gson = new Gson();
             String sendToInString = gson.toJson(sendTo);
