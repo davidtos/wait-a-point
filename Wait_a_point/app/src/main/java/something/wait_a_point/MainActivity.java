@@ -35,7 +35,7 @@ public class MainActivity extends Activity implements Observer {
        String name = getIntent().getStringExtra("Name");
 
         SingleSocket.getInstance().AddObserver(this);
-        SingleSocket.getInstance().Start(name);
+        SingleSocket.getInstance().Start("David");
        // sm.addObserver(this);
       //  sm.start(name);
         ll = (RelativeLayout)findViewById(R.id.relativeLayout);
@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements Observer {
         Intent intent = new Intent(this, FirstChallange.class);
         intent.putExtra("player1", true);
         intent.putExtra("player1name", "David");
-        intent.putExtra("player2name", "David");
+        intent.putExtra("player2name", "Fatih");
 
         startActivity(intent);
 

@@ -96,6 +96,7 @@ public class FirstChallange extends Activity implements Observer {
 
     public void ClickedWhite(View v) {
         if (isWhite){
+            setBackgroundBlack();
             SendToOtherPlayer(messageStrings.RoundWon.toString());
             if (player1){
                 player1Score++;
@@ -103,6 +104,9 @@ public class FirstChallange extends Activity implements Observer {
             else{
                 player2Score++;
             }
+            Rounds++;
+            UpdateScore();
+            startRound();
         }
         else{
             if (player1){
@@ -121,43 +125,46 @@ public class FirstChallange extends Activity implements Observer {
             @Override
             public void run() {
                 setBackgroundBlack();
+
+                if (player1) {
+                    SendToOtherPlayer(messageStrings.Black.toString());
+                }
+                if (!player1) {
+                    player1Score++;
+                } else {
+                    player2Score++;
+                }
+
+//                if (Rounds == 5) {
+//                    SingleSocket.getInstance().RemoveObserver(this);
+//                    Intent intent = new Intent(this, FirstChallange.class);
+//                    intent.putExtra("player1", true);
+//                    intent.putExtra("player1name", "David");
+//                    intent.putExtra("player2name", "David");
+//
+//                    startActivity(intent);
+//                }
+                Rounds++;
+                UpdateScore();
+                startRound();
+
+
             }
         });
 
 
-        if (player1) {
-            SendToOtherPlayer(messageStrings.Black.toString());
-        }
-        if (!player1){
-            player1Score++;
-        }
-        else{
-            player2Score++;
-        }
 
-        if(Rounds == 5){
-            SingleSocket.getInstance().RemoveObserver(this);
-            Intent intent = new Intent(this, FirstChallange.class);
-            intent.putExtra("player1", true);
-            intent.putExtra("player1name", "David");
-            intent.putExtra("player2name", "David");
-
-            startActivity(intent);
-        }
-        Rounds++;
-        UpdateScore();
-        startRound();
 
 
     }
 
     public void playerPunish(){
         //setBackgroundBlack();
-        if (!player1){
-            player1Score--;
+        if (player1){
+            player2Score--;
         }
         else{
-            player2Score--;
+            player1Score--;
         }
 
         firstChallange.runOnUiThread(new Runnable() {
