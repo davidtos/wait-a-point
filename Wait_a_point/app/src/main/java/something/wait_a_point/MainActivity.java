@@ -85,6 +85,18 @@ public class MainActivity extends Activity implements Observer {
                 Gson gson = new Gson();
                 String sendToInString = gson.toJson(sendTo);
                 SingleSocket.getInstance().getsm().SendTo(sendToInString);
+
+                SingleSocket.getInstance().RemoveObserver(this);
+                Intent intent = new Intent(this, FirstChallange.class);
+                // inviter is player 1
+                String p1 = data.getStringExtra("Challeger");
+                // i am getting invited for a game = this.user is player 2
+                String p2 = this.username;
+                intent.putExtra("player1", false);
+                intent.putExtra("player1name", p1);
+                intent.putExtra("player2name", p2);
+
+                startActivity(intent);
             } else if (resultCode == RESULT_CANCELED) {
                 // declined
                 SendTo sendTo = new SendTo("ChallengeAnswer",data.getStringExtra("Challeger"),this.username,"Decline");
@@ -154,6 +166,18 @@ public class MainActivity extends Activity implements Observer {
                     String answer = received.getMessage();
                     if(answer.equals("Accept"))
                     {
+
+                        SingleSocket.getInstance().RemoveObserver(this);
+                        Intent intent = new Intent(this, FirstChallange.class);
+                        // from = sender = game inviter = player 1
+                        String p1 = received.getFrom();
+                        // to = receiver = game accepter player 2
+                        String p2 = received.getTo();
+                        intent.putExtra("player1", true);
+                        intent.putExtra("player1name", p2);
+                        intent.putExtra("player2name", p1);
+
+                        startActivity(intent);
 
                         runOnUiThread(new Runnable() {
                             public void run() {
