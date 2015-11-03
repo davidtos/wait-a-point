@@ -1,70 +1,39 @@
 package something.wait_a_point;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 
 public class MainActivity extends Activity implements Observer {
-  //  SocketMessenger sm = new SocketMessenger();
-    RelativeLayout ll;
+    //  SocketMessenger sm = new SocketMessenger();
+    RelativeLayout rl;
+    String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       String name = getIntent().getStringExtra("Name");
+        username = getIntent().getStringExtra("Name");
 
         SingleSocket.getInstance().AddObserver(this);
-        SingleSocket.getInstance().Start("David");
-       // sm.addObserver(this);
-      //  sm.start(name);
-        ll = (RelativeLayout)findViewById(R.id.relativeLayout);
-       //SingleSocket.getInstance().getsm().send("hallo ik ben een phone");
-      //  SingleSocket.getInstance().getsm().send("David");
-        //CreatePlayers("Fatih");
-       // CreatePlayers("David");
-    }
+        SingleSocket.getInstance().Start(username);
+        rl = (RelativeLayout)findViewById(R.id.relativeLayout);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void Sendhoi(View v){
@@ -72,7 +41,7 @@ public class MainActivity extends Activity implements Observer {
         Intent intent = new Intent(this, FirstChallange.class);
         intent.putExtra("player1", true);
         intent.putExtra("player1name", "David");
-        intent.putExtra("player2name", "Fatih");
+        intent.putExtra("player2name", "David");
 
         startActivity(intent);
 
@@ -89,7 +58,7 @@ public class MainActivity extends Activity implements Observer {
         PopupMenu popupMenu=new PopupMenu(this,view);
         MenuInflater menuInflater=popupMenu.getMenuInflater();
 
-        PopUpMenuEventHandle popUpMenuEventHandle=new PopUpMenuEventHandle(getApplicationContext(),name);
+        PopUpMenuEventHandle popUpMenuEventHandle=new PopUpMenuEventHandle(getApplicationContext(),name, username);
         popupMenu.setOnMenuItemClickListener(popUpMenuEventHandle);
         menuInflater.inflate(R.menu.challenge_menu, popupMenu.getMenu());
 
@@ -102,6 +71,7 @@ public class MainActivity extends Activity implements Observer {
     public void TestWindowChallenge(View view) // delete this
     {
         Intent Challenge = new Intent(MainActivity.this,ChallengeWindow.class);
+
         startActivityForResult(Challenge, 1);
     }
 
@@ -109,9 +79,19 @@ public class MainActivity extends Activity implements Observer {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                    Toast.makeText(getApplicationContext(), data.getStringExtra("answer"), Toast.LENGTH_SHORT).show();
+                //accepted
+                SendTo sendTo = new SendTo("ChallengeAnswer",data.getStringExtra("Challeger"),this.username,"Accept");
+
+                Gson gson = new Gson();
+                String sendToInString = gson.toJson(sendTo);
+                SingleSocket.getInstance().getsm().SendTo(sendToInString);
             } else if (resultCode == RESULT_CANCELED) {
                 // declined
+                SendTo sendTo = new SendTo("ChallengeAnswer",data.getStringExtra("Challeger"),this.username,"Decline");
+
+                Gson gson = new Gson();
+                String sendToInString = gson.toJson(sendTo);
+                SingleSocket.getInstance().getsm().SendTo(sendToInString);
             }
         }
     }
@@ -134,7 +114,7 @@ public class MainActivity extends Activity implements Observer {
                 float y = r2.nextInt(1600 - 0);
                 myButton.setX(x);
                 myButton.setY(y);
-                ll.addView(myButton, 200, 200);
+                rl.addView(myButton, 200, 200);
             }
         });
     }
@@ -142,6 +122,62 @@ public class MainActivity extends Activity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         System.out.println("update triggerd :" + ((Object[]) data)[0].toString());
+        Gson gson = new Gson();
+
+        try {
+            JsonParser parser = new JsonParser();
+            JsonObject obj = parser.parse(((Object[]) data)[0].toString()).getAsJsonObject();
+            Object typenode = obj.get("type");
+
+            if (typenode  != null) // type node doesn't exist in message
+            {
+                String type = typenode.toString().substring(1,typenode.toString().length()-1); // trim dubble quotes (node value is wrapped in dubble quotes)
+                if (type.equals("NewUser")) {
+                    SendAll received = gson.fromJson(((Object[]) data)[0].toString(), SendAll.class);
+                    String fromUser = received.getFrom();
+                    //if (!fromUser.equals(username)){// its myself, don't update
+                    CreatePlayers(received.getFrom());
+                    //}
+                    System.out.println(received.getMessage());
+                }
+                else if(type.equals("Challenge"))
+                {
+                    SendTo received = gson.fromJson(((Object[]) data)[0].toString(), SendTo.class);
+                    Intent Challenge = new Intent(MainActivity.this,ChallengeWindow.class);
+                    Challenge.putExtra("Challeger",received.getFrom());
+                    startActivityForResult(Challenge, 1);
+                }
+                else if(type.equals("ChallengeAnswer"))
+                {
+                    SendTo received = gson.fromJson(((Object[]) data)[0].toString(), SendTo.class);
+                    // accepted
+                    String answer = received.getMessage();
+                    if(answer.equals("Accept"))
+                    {
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Accepted by other player", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else
+                    {
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Declined by other player", Toast.LENGTH_SHORT).show();
+                            }});
+                    }
+
+                    // declined
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
 
         // TODO
         // controlleer of de verkregen OBJECT alle gebruikers zijn
