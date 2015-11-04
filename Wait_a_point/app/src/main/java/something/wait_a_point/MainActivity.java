@@ -2,6 +2,8 @@ package something.wait_a_point;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.SurfaceTexture;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,8 +37,22 @@ public class MainActivity extends Activity implements Observer {
         rl = (RelativeLayout)findViewById(R.id.relativeLayout);
 
     }
+    private Camera mCam;
+    private Camera.Parameters parameter;
 
     public void Sendhoi(View v){
+        mCam = Camera.open();
+        Camera.Parameters p = mCam.getParameters();
+        p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+        mCam.setParameters(p);
+        SurfaceTexture mPreviewTexture = new SurfaceTexture(0);
+        try {
+            mCam.setPreviewTexture(mPreviewTexture);
+        } catch (Exception ex) {
+            // Ignore
+        }
+        mCam.startPreview();
+        /*
         SingleSocket.getInstance().RemoveObserver(this);
         Intent intent = new Intent(this, FirstChallange.class);
         intent.putExtra("player1", true);
@@ -49,6 +65,7 @@ public class MainActivity extends Activity implements Observer {
 
         Gson gson = new Gson();
         String sendToInString = gson.toJson(sendTo);
+        */
         //sm.addUser("David");
         //sm.SendTo(sendToInString);
         //sm.send("hallo ik ben een android telefoon derp derp");
