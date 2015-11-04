@@ -157,6 +157,7 @@ public class MainActivity extends Activity implements Observer {
             JsonParser parser = new JsonParser();
             JsonObject obj = parser.parse(((Object[]) data)[0].toString()).getAsJsonObject();
             Object typenode = obj.get("type");
+            Object users = obj.get("AllUsers");
 
             if (typenode  != null) // type node doesn't exist in message
             {
@@ -230,10 +231,22 @@ public class MainActivity extends Activity implements Observer {
 
                     // declined
                 }
+            } else if(users != null)
+            {
+                String allUsers = users.toString().substring(2,users.toString().length()-2).replace("\"", ""); // trim dubble quotes (node value is wrapped in dubble quotes)
+                String[] arrayUsers = allUsers.split(",");
+                for (int i = 0; i < arrayUsers.length; i++) {
+                    if (!arrayUsers[i].equals(username)) {// its myself, don't update
+                        CreatePlayers(arrayUsers[i]);
+                    }
+                }
             }
+
+
         }
         catch (Exception e)
         {
+
             System.out.println(e.getMessage());
         }
 
