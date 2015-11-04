@@ -126,7 +126,7 @@ public class FirstChallange extends Activity implements Observer {
         }
         UpdateScore();
         Rounds++;
-        if (Rounds >= 2) {
+        if (Rounds == 10) {
             SingleSocket.getInstance().RemoveObserver(firstChallange);
             Intent intent = new Intent(firstChallange, Find.class);
             intent.putExtra("player1", player1);
@@ -152,7 +152,7 @@ public class FirstChallange extends Activity implements Observer {
                     player2Score++;
                 }
 
-                if (Rounds >= 2) {
+                if (Rounds == 10) {
                     SingleSocket.getInstance().RemoveObserver(firstChallange);
                     Intent intent = new Intent(firstChallange, Find.class);
                     intent.putExtra("player1", player1);
