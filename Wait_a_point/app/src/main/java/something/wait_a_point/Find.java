@@ -26,7 +26,7 @@ public class Find extends Activity implements Observer {
     private Camera camera;
     //Torch button
     private Button button;
-
+    Camera mCam = Camera.open();
     String player1name;
     String player2name;
     Boolean player1;
@@ -98,19 +98,42 @@ public class Find extends Activity implements Observer {
         System.out.println(received.getMessage());
 
         if(received.getMessage().equals("Flash")){
-            Camera mCam = Camera.open();
-            Camera.Parameters p = mCam.getParameters();
-            p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-            mCam.setParameters(p);
-            SurfaceTexture mPreviewTexture = new SurfaceTexture(0);
 
-            try {
-                mCam.setPreviewTexture(mPreviewTexture);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(!isFlashOn){
+
+                Camera.Parameters p = mCam.getParameters();
+                p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                mCam.setParameters(p);
+                SurfaceTexture mPreviewTexture = new SurfaceTexture(0);
+
+                try {
+                    mCam.setPreviewTexture(mPreviewTexture);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                mCam.startPreview();
+                mCam.release();
+                isFlashOn = true;
+            }
+            else{
+                Camera mCam = Camera.open();
+                Camera.Parameters p = mCam.getParameters();
+                p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                mCam.setParameters(p);
+                SurfaceTexture mPreviewTexture = new SurfaceTexture(0);
+
+                try {
+                    mCam.setPreviewTexture(mPreviewTexture);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                mCam.startPreview();
+                mCam.release();
+                isFlashOn = false;
             }
 
-            mCam.startPreview();
         }
     }
 }
