@@ -26,7 +26,7 @@ public class Find extends Activity implements Observer {
     private Camera camera;
     //Torch button
     private Button button;
-    Camera mCam = Camera.open();
+    Camera mCam;
     String player1name;
     String player2name;
     Boolean player1;
@@ -36,7 +36,7 @@ public class Find extends Activity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find);
         SingleSocket.getInstance().AddObserver(this);
-
+        mCam = Camera.open();
         player1name = getIntent().getExtras().getString("player1name");
         player2name = getIntent().getExtras().getString("player2name");
         player1 = getIntent().getExtras().getBoolean("player1");
