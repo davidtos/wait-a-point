@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class ChallengeWindow extends Activity {
 
@@ -24,6 +25,9 @@ public class ChallengeWindow extends Activity {
 
         getWindow().setLayout((int)(width*.7),(int)(height*.4));
         this.challeger = getIntent().getStringExtra("Challeger");
+
+        TextView t = (TextView) findViewById(R.id.uitdagingtxt);
+        t.setText("Uitdaging ontvangen van : " + this.challeger);
 
     }
 

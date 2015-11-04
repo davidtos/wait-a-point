@@ -164,9 +164,26 @@ public class MainActivity extends Activity implements Observer {
                 if (type.equals("NewUser")) {
                     SendAll received = gson.fromJson(((Object[]) data)[0].toString(), SendAll.class);
                     String fromUser = received.getFrom();
-                    //if (!fromUser.equals(username)){// its myself, don't update
+                    if (!fromUser.equals(username)){// its myself, don't update
                     CreatePlayers(received.getFrom());
-                    //}
+                    }
+                    else
+                    {
+                        // add myself in center of screeen
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Button myButton = new Button(getApplicationContext());
+                                myButton.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.roundprofilepic, getTheme()));
+                                rl.addView(myButton, 200, 200);
+
+                                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams)myButton.getLayoutParams();
+                                rlp.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
+                                myButton.setLayoutParams(rlp);
+
+
+                            }
+                        });
+                    }
                     System.out.println(received.getMessage());
                 }
                 else if(type.equals("Challenge"))

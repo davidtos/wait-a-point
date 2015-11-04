@@ -1,14 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/actionbar"
-    android:orientation="vertical">
+    android:background="@color/actionbar_Dark"
+    android:orientation="vertical"
+    android:gravity="center">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView android:text="uitdaging" android:id="@+id/uitdagingtxt" android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:textColor="@color/white"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:textColor="@color/bg_btn_join"
+        android:background="@color/actionbar"
         android:layout_height="wrap_content"
         android:text="Uitdaging Accepteren"
         android:id="@+id/Accept"
