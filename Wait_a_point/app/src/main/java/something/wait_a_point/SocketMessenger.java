@@ -48,7 +48,7 @@ public class SocketMessenger extends Observable implements Runnable {
     @Override
     public void run() {
         try {
-            socket = IO.socket("http://192.168.2.13:3000");
+            socket = IO.socket("http://145.144.240.165:3000");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 
                 @Override

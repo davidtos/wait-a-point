@@ -55,7 +55,7 @@ public class FirstChallange extends Activity implements Observer {
 
     public void startRound(){
         if(player1){
-            ChangeBackgroundColorThread changeBackgroundColorThread = new ChangeBackgroundColorThread(this,8000,15000);
+            ChangeBackgroundColorThread changeBackgroundColorThread = new ChangeBackgroundColorThread(this,3000,6000);
             Thread t = new Thread(changeBackgroundColorThread);
             t.start();
         }
@@ -85,8 +85,14 @@ public class FirstChallange extends Activity implements Observer {
     }
 
     public void setBackgroundWhite(){
-        setActivityBackgroundColor(getResources().getColor(android.R.color.white));
-        isWhite = true;
+
+        firstChallange.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setActivityBackgroundColor(getResources().getColor(android.R.color.white));
+                isWhite = true;
+            }
+        });
     }
 
     public void setActivityBackgroundColor(int color) {
@@ -100,6 +106,7 @@ public class FirstChallange extends Activity implements Observer {
             SendToOtherPlayer(messageStrings.RoundWon.toString());
             if (player1){
                 player1Score++;
+
             }
             else{
                 player2Score++;
@@ -118,6 +125,16 @@ public class FirstChallange extends Activity implements Observer {
             SendToOtherPlayer(messageStrings.Punish.toString());
         }
         UpdateScore();
+        Rounds++;
+        if (Rounds == 10) {
+            SingleSocket.getInstance().RemoveObserver(firstChallange);
+            Intent intent = new Intent(firstChallange, Find.class);
+            intent.putExtra("player1", player1);
+            intent.putExtra("player1name", player1name);
+            intent.putExtra("player2name", player2name);
+
+            startActivity(intent);
+        }
     }
 
     public void playerWonRound(){
@@ -135,19 +152,18 @@ public class FirstChallange extends Activity implements Observer {
                     player2Score++;
                 }
 
-//                if (Rounds == 5) {
-//                    SingleSocket.getInstance().RemoveObserver(this);
-//                    Intent intent = new Intent(this, FirstChallange.class);
-//                    intent.putExtra("player1", true);
-//                    intent.putExtra("player1name", "David");
-//                    intent.putExtra("player2name", "David");
-//
-//                    startActivity(intent);
-//                }
+                if (Rounds == 10) {
+                    SingleSocket.getInstance().RemoveObserver(firstChallange);
+                    Intent intent = new Intent(firstChallange, Find.class);
+                    intent.putExtra("player1", player1);
+                    intent.putExtra("player1name", player1name);
+                    intent.putExtra("player2name", player2name);
+
+                    startActivity(intent);
+                }
                 Rounds++;
                 UpdateScore();
                 startRound();
-
 
             }
         });
