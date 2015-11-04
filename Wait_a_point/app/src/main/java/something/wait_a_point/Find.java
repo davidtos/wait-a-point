@@ -113,11 +113,11 @@ public class Find extends Activity implements Observer {
                 }
 
                 mCam.startPreview();
-                mCam.release();
+                //mCam.release();
                 isFlashOn = true;
             }
             else{
-                Camera mCam = Camera.open();
+              //  Camera mCam = Camera.open();
                 Camera.Parameters p = mCam.getParameters();
                 p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                 mCam.setParameters(p);
@@ -130,7 +130,7 @@ public class Find extends Activity implements Observer {
                 }
 
                 mCam.startPreview();
-                mCam.release();
+             //   mCam.release();
                 isFlashOn = false;
             }
 

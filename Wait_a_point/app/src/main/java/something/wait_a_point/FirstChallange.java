@@ -50,7 +50,7 @@ public class FirstChallange extends Activity implements Observer {
     }
 
     public void UpdateScore(){
-        t.setText(Integer.toString(player1Score) + " - " + Integer.toString(player2Score));
+        t.setText(Integer.toString(player1Score) + " _ " + Integer.toString(player2Score) + " / " + Integer.toString(Rounds));
     }
 
     public void startRound(){
@@ -106,12 +106,32 @@ public class FirstChallange extends Activity implements Observer {
             SendToOtherPlayer(messageStrings.RoundWon.toString());
             if (player1){
                 player1Score++;
+                UpdateScore();
+                if (Rounds >= 5) {
+                    SingleSocket.getInstance().RemoveObserver(firstChallange);
+                    Intent intent = new Intent(firstChallange, Find.class);
+                    intent.putExtra("player1", player1);
+                    intent.putExtra("player1name", player1name);
+                    intent.putExtra("player2name", player2name);
+
+                    startActivity(intent);
+                }
+                Rounds++;
 
             }
             else{
                 player2Score++;
+                if (Rounds >= 5) {
+                    SingleSocket.getInstance().RemoveObserver(firstChallange);
+                    Intent intent = new Intent(firstChallange, Find.class);
+                    intent.putExtra("player1", player1);
+                    intent.putExtra("player1name", player1name);
+                    intent.putExtra("player2name", player2name);
+
+                    startActivity(intent);
+                }
+                Rounds++;
             }
-            Rounds++;
             UpdateScore();
             startRound();
         }
@@ -122,19 +142,10 @@ public class FirstChallange extends Activity implements Observer {
             else{
                 player2Score--;
             }
+            UpdateScore();
             SendToOtherPlayer(messageStrings.Punish.toString());
         }
-        UpdateScore();
-        Rounds++;
-        if (Rounds == 10) {
-            SingleSocket.getInstance().RemoveObserver(firstChallange);
-            Intent intent = new Intent(firstChallange, Find.class);
-            intent.putExtra("player1", player1);
-            intent.putExtra("player1name", player1name);
-            intent.putExtra("player2name", player2name);
 
-            startActivity(intent);
-        }
     }
 
     public void playerWonRound(){
@@ -152,7 +163,7 @@ public class FirstChallange extends Activity implements Observer {
                     player2Score++;
                 }
 
-                if (Rounds == 10) {
+                if (Rounds >= 5) {
                     SingleSocket.getInstance().RemoveObserver(firstChallange);
                     Intent intent = new Intent(firstChallange, Find.class);
                     intent.putExtra("player1", player1);
@@ -167,10 +178,6 @@ public class FirstChallange extends Activity implements Observer {
 
             }
         });
-
-
-
-
 
     }
 
