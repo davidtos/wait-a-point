@@ -2,6 +2,7 @@ package something.wait_a_point;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.app.Activity;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -96,7 +98,19 @@ public class Find extends Activity implements Observer {
         System.out.println(received.getMessage());
 
         if(received.getMessage().equals("Flash")){
-            turnOnFlashLight();
+            Camera mCam = Camera.open();
+            Camera.Parameters p = mCam.getParameters();
+            p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            mCam.setParameters(p);
+            SurfaceTexture mPreviewTexture = new SurfaceTexture(0);
+
+            try {
+                mCam.setPreviewTexture(mPreviewTexture);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mCam.startPreview();
         }
     }
 }
