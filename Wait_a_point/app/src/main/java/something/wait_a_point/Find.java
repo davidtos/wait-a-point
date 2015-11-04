@@ -71,6 +71,22 @@ public class Find extends Activity implements Observer {
         }
     }
 
+    Camera cam = null;
+    public void turnOnFlashLight() {
+        try {
+            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+                cam = Camera.open();
+                Camera.Parameters p = cam.getParameters();
+                p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                cam.setParameters(p);
+                cam.startPreview();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getBaseContext(), "Exception throws in turning on flashlight.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void update(Observable observable, Object data) {
         System.out.println("update triggerd :" + ((Object[]) data)[0].toString());
@@ -80,50 +96,7 @@ public class Find extends Activity implements Observer {
         System.out.println(received.getMessage());
 
         if(received.getMessage().equals("Flash")){
-
-            //Context object to refer context of the application
-            Context context = this;
-            //Retrieve application packages that are currently installed
-            //on the device which includes camera, GPS etc.
-            PackageManager pm = context.getPackageManager();
-
-            if(!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-                Logger message;
-                Log.e("err", "Device has no camera!");
-                //Toast a message to let the user know that camera is not
-                //installed in the device
-                Toast.makeText(getApplicationContext(),
-                        "Your device doesn't have camera!", Toast.LENGTH_SHORT).show();
-                //Return from the method, do nothing after this code block
-                return;
-            }
-            camera = Camera.open();
-            final Camera.Parameters p = camera.getParameters();
-
-            //If Flag is set to true
-            if (isFlashOn) {
-                Log.i("info", "torch is turned off!");
-                //Set the flashmode to off
-                p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-                //Pass the parameter ti camera object
-                camera.setParameters(p);
-                //Set flag to false
-                isFlashOn = false;
-                //Set the button text to Torcn-ON
-                button.setText("Torch-ON");
-            }
-            //If Flag is set to false
-            else {
-                Log.i("info", "torch is turned on!");
-                //Set the flashmode to on
-                p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-                //Pass the parameter ti camera object
-                camera.setParameters(p);
-//Set flag to true
-                isFlashOn = true;
-//Set the button text to Torcn-OFF
-                button.setText("Torch-OFF");
-            }
+            turnOnFlashLight();
         }
     }
 }
