@@ -25,8 +25,13 @@ io.on('connection', function(socket){
         clients[msg] = {
             "socket": socket.id
         };
-        console.log(msg);
-        //socket.emit('chat message', Object.keys(clients));       
+        //console.log(msg);
+		//msg.message
+		var json = JSON.stringify({AllUsers: Object.keys(clients)});
+		console.log(json);
+        socket.emit('chat message',json);
+		//console.log(json);
+		
     });
 });
 
