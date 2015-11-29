@@ -50,7 +50,7 @@ public class FirstChallange extends Activity implements Observer {
     }
 
     public void UpdateScore(){
-        t.setText(Integer.toString(player1Score) + " _ " + Integer.toString(player2Score) + " / " + Integer.toString(Rounds));
+        t.setText(player1name +": "+ Integer.toString(player1Score) + " vs " + Integer.toString(player2Score) +" :" + player2name  + " | Round " + Integer.toString(Rounds));
     }
 
     public void startRound(){
